@@ -1,1 +1,410 @@
-test
+<h2 id="介绍">介绍</h2>
+
+<h3 id="pi_front是什么">pi_front是什么</h3>
+
+<p>pi_front是</p>
+
+<h3 id="hello_world">hello_world</h3>
+
+<p>以下是hello_world</p>
+
+<h3 id="条件与循环">条件与循环</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># tpl
+
+
+    
+        &lt;5
+        =5
+        &gt;5
+        
+    &lt;br&gt;
+
+
+# 结果
+4&lt;5
+5=5
+6&gt;5
+</code></pre></div></div>
+
+<p>以上即是一个简单的循环、条件、显示的应用，我们在所有需要处理的显示对象外层嵌套处理逻辑，不破坏原有代码结构，尽量保证布局的原始性，但又实现了需求</p>
+
+<p>循环：以for-end配对处理，可实现循环显示</p>
+
+<p>条件：以if(-elseif-else)-end配对处理，elseif与else可不处理，可实现按条件显示</p>
+
+<p>-显示：可直接将对应数据</p>
+
+<p>–赋值：对变量赋值</p>
+
+<h3 id="事件监听">事件监听</h3>
+
+<ul>
+  <li>
+    <p>我们的事件监听是在原生事件的基础上封装完成的，所以支持类似原生dom处理</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;button class="btn" on-tap="ok('ok')"&gt;确认&lt;/button&gt;
+  点击确定按钮
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>我们也对事件进行了扩展处理，支持了自定义事件的监听，你可以简单的将事件手动抛出，在其直系父节点上再监听该事件，从而实现数据的传递。这种处理在组件系统中被广泛使用</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # js抛出
+  notify(this.parentNode, 'ev-emit-click', { index: this.props.index });
+  # tpl抛出
+  &lt;button on-tap='$notify("ev-emit-click", { "id":, })'&gt;"g2"&lt;/button&gt;
+  # tpl接收
+  &lt;section ev-emit-click="clickCardPond"&gt;&lt;/section&gt;
+    
+  以上两种情况都能做到抛出事件，最后由其直系父节点接收到该事件
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>目前支持以下事件</p>
+    <ul>
+      <li>on-move:移动，滑动</li>
+      <li>on-tap:点击</li>
+      <li>on-dbltap:双击</li>
+      <li>on-longtap:长按</li>
+      <li>on-down:点下</li>
+      <li>on-up:弹起</li>
+      <li>on-rotsal:旋转缩放–自定义扩展，仅移动端有效，效果是两个手指缩放或旋转时触发</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="组件化">组件化</h3>
+
+<p>目前我们所有的界面都是以组件化的形式组成的,这样能通过将通用组件抽离，时界面表现更简洁</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;children-playerarea-playerarea$&gt;{"isOpponent":true,player:}&lt;/children-playerarea-playerarea$&gt;
+
+&lt;children-neutralarea-neutralarea$&gt;{shared:}&lt;/children-neutralarea-neutralarea$&gt;
+
+&lt;children-playerarea-playerarea$&gt;{"isOpponent":false,player:}&lt;/children-playerarea-playerarea$&gt;
+
+以上实例即实现了创建出3块战斗区域,其中playerarea与neutralarea就是单独抽离出的组件，具体组件相关知识，将在接下来详细解说
+</code></pre></div></div>
+
+<p>组件化之后有以下优点</p>
+
+<ul>
+  <li>提高代码的复用,减少重复工作
+    <ul>
+      <li>组件级别的复用(提供通用组件)</li>
+      <li>脚本的复用</li>
+      <li>模板的复用</li>
+      <li>样式的复用(提供了常用的样式库/动画库)</li>
+    </ul>
+  </li>
+  <li>提高编码效率
+    <ul>
+      <li>提供了样式的局部作用域</li>
+      <li>提供可编程模板</li>
+      <li>数据和显示的分离=&gt;更好的前端分工，写逻辑的人只关心数据变化，不管关心界面变化</li>
+      <li>无需手动操作DOM=&gt;代码更简介，不要关注烦人的dom操作</li>
+    </ul>
+  </li>
+  <li>提高显示效果
+    <ul>
+      <li>高效的帧管理，要么全部更新，要么不更新，保证画面不会闪烁</li>
+      <li>精确的DOM更新，保证只刷新真正需要刷新的部分</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="组件系统">组件系统</h2>
+
+<ul>
+  <li>创建组件
+    <ul>
+      <li>
+        <p>默认组件(js/wcss/tpl/config)</p>
+
+        <p>一个简单的组件，一般需要一个tpl文件，用于定义该组件的布局结构，是组件的主题表现；</p>
+
+        <p>在此基础上，可配置同名的js文件，用于对其逻辑数据进行处理；</p>
+
+        <p>在此基础上，可配置同名的wcss文件，用于对其样式进行处理，详见下方样式处理</p>
+
+        <p>在此基础上，可配置同名的config文件，用于对组件进行完善，常用属性如下</p>
+        <ul>
+          <li>group:该组件显示某个主层级中</li>
+          <li>
+            <p>也可以在对应的组件的create函数中定义</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  create(){        
+      super.create();
+      this.config = {value:{group:"cover"}}
+  }
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>.widget组件(wcss/tpl/forelet/widget/config)</p>
+
+        <p>这是一种可实现通过配置，实现tpl、wcss、js、config不同的组装，构建出新的一个组件，从而实现复用</p>
+      </li>
+      <li>
+        <p>如何创建一个组件</p>
+        <ul>
+          <li>
+            <p>通过在tpl中直接定义，可直接创建组件</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;children-playerarea-playerarea$&gt;{"isOpponent":false,player:}&lt;/children-playerarea-playerarea$&gt;
+
+  常用的格式还有以下几种
+  &lt;role_show$ style=""&gt;&lt;/role_show$&gt;表示本目录下的role_show组件，
+  &lt;role_show$$ style=""&gt;&lt;/role_show$$&gt;表示父目录下的role_show组件，
+  &lt;role_show-zb_show$$ style=""&gt;&lt;/role_show-zb_show$$&gt;表示父目录下role_show目录下的zb_show组件
+  &lt;app-base-btn style=""&gt;&lt;/app-base-btn&gt;表示根目录开始，app/base目录下的btn组件
+</code></pre></div>            </div>
+          </li>
+          <li>
+            <p>通过调用pi.ui.root模块中pop或popNew函数，弹出新的组件界面</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  import { popNew } from '../../pi/ui/root';
+
+  popNew(foreletName, foreletParams, (ok:string) =&gt; {
+      //todo 这里处理触发ok函数时的回调
+  }, (cancel:string) =&gt; {
+      //todo 这里处理触发cancel函数时的回调
+  });
+</code></pre></div>            </div>
+          </li>
+          <li>
+            <p>通过第二种方式弹出组件界面时，可在foreletParams中定义另一个组件名，已widget做键，可同时再创建新的一个组件。(?显示方式)</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  import { popNew } from '../../pi/ui/root';
+
+  foreletParams.widget = newForeletName;
+
+  popNew(foreletName, foreletParams, (ok:string) =&gt; {
+      //todo 这里处理触发ok函数时的回调
+  }, (cancel:string) =&gt; {
+      //todo 这里处理触发cancel函数时的回调
+  });
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>样式处理
+    <ul>
+      <li>
+        <p>wcss</p>
+
+        <p>wcss样式文件是我们自定义的用于处理样式的文件，通过定义<code class="highlighter-rouge">w-class="my-money"</code>实现对其引用。其格式与原生css结构一致，因其原理限制，暂不支持伪类( :hover)、伪对象( :first-child)和关键帧动画( animation keyframes)</p>
+      </li>
+      <li>
+        <p>wcss处理原理</p>
+
+        <p>我们会将所有的wcss中定义的属性改为内联样式添加到对应都没节点上，但其优先级会略低于直接定义的内联样式。</p>
+
+        <p>因其最终表现为内联样式，就有了上述说的某些不支持的情况。</p>
+
+        <p>由于引用wcss文件不占有原生引用css文件位置，那么一个dom节点上能同时再引入全局css文件进行处理</p>
+      </li>
+      <li>
+        <p>样式的优先级(innerstyle&gt;wcss&gt;css–参见css例子)</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # tpl文件
+  &lt;section w-class="my-money" class="center" style="color:red;"&gt;$999&lt;/section&gt;
+
+  # wcss文件
+  .my-money {
+      position: absolute;
+      bottom:0;
+      left:0;
+      width:30%;
+      height:25px;
+      border-radius:0px 150px 0px 0px;
+      background-color:rgba(0, 255, 128, 0.3);
+  }
+
+  # 全局css文件
+  .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+</code></pre></div>        </div>
+
+        <p>上述就是一个简单的样式应用</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>数据传递</p>
+
+    <p>组件间的数据传递，将孤立的组件串联起来，构成一个整体</p>
+
+    <ul>
+      <li>子组件=&gt;父组件
+        <ul>
+          <li>通过子组件抛出事件，父组件监听事件的形式实现数据传递</li>
+        </ul>
+      </li>
+      <li>
+        <p>父组件=&gt;子组件</p>
+
+        <p>在创建组件时传入参数</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;role_show$ style=""&gt;这里可传入参数&lt;/role_show$&gt;
+
+  popNew(foreletName, foreletParams);
+  foreletParams:传递的参数
+</code></pre></div>        </div>
+      </li>
+      <li>简单数据传递</li>
+      <li>含有变量的数据传递</li>
+      <li>多层数据传递</li>
+    </ul>
+  </li>
+  <li>事件处理
+    <ul>
+      <li>
+        <p>自定义事件</p>
+
+        <p>自定义事件被广泛应用于组件间的数据传递，直系父子间都能通过自定义的事件来完成</p>
+      </li>
+      <li>
+        <p>系统事件</p>
+        <ul>
+          <li>可直接绑定7种我们支持的系统事件，在事件监听中有具体的定义</li>
+          <li>cap—代表传递方式为捕获</li>
+          <li>on—代表传递方式为冒泡</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>生命周期
+    <ul>
+      <li>帧调度</li>
+      <li>widget
+        <ul>
+          <li>
+            <p>什么是widget</p>
+
+            <p>负责显示逻辑，是数据和原始dom间的桥梁</p>
+          </li>
+          <li>
+            <p>widget属性</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  public name: string = null; // 组件的名称
+  public tpl: Tpl = null; // 组件的模板
+  public sheet: {value: Sheet} = null; // 组件的样式
+  public config: {value: Json} = null; // 所对应的配置
+  public forelet: Forelet = null; // 所对应的forelet
+  public props: Json = null; // 由父组件设置的组件属性
+  public state: Json = null; // 由forelet设置的组件状态
+  public tree: VWNode = null; // 组件所对应的节点树
+  public parentNode: VirtualWidgetNode = null; // 父节点，parentNode.link的对象就是widget
+  public children: Widget[] = []; // 所有的子组件
+  public inDomTree: boolean = false; // 是否在dom树中
+  public resTab: ResTab = null; // 资源表
+  public resTimeout: number = 3000; // 资源缓冲时间，默认3秒
+</code></pre></div>            </div>
+          </li>
+          <li>widget生命周期钩子</li>
+          <li>widget生命周期图示</li>
+        </ul>
+      </li>
+      <li>forelet
+        <ul>
+          <li>
+            <p>forelet作用</p>
+
+            <p>负责进行业务逻辑处理，是数据库和显示组件间的桥梁</p>
+          </li>
+          <li>
+            <p>forelet生命周期</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>模板语法
+    <ul>
+      <li>
+        <p>注释</p>
+
+        <p>直接在模板中定义``实现添加注释</p>
+      </li>
+      <li>插值(强调可以在任何地方插值)
+        <ul>
+          <li>文本</li>
+          <li>css片段</li>
+          <li>
+            <p>js表达式</p>
+
+            <p>因模板处理原理是对tpl中字符串进行解析处理，通过一定规范，重新转换为新的字符串，并解析为对于的节点树，所以我们可在任意地方进行插值，构建出想要的效果。</p>
+
+            <p>常用的插值格式有以下几种</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  调用函数:
+  判断赋值:
+  直接赋值：
+  默认值赋值：
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>变量定义</p>
+
+        <p>直接在模板中定义<code class="highlighter-rouge">实现定义变量并赋值，也可以通过定义</code>对数据进行修改</p>
+      </li>
+      <li>函数声明</li>
+      <li>内置变量
+        <ul>
+          <li>it–对应组件中props中的值，也就是父组件传递下来的数据</li>
+          <li>it1–对应组件中state中的值，也就是当前界面自己定义的数据</li>
+          <li>_cfg–对应组件中配置的额外参数，对应config文件中的配置</li>
+        </ul>
+
+        <p>我们在模板中，有以上几个内置变量可直接使用。</p>
+
+        <p>警告：内置变量中的值不要在模板中修改</p>
+      </li>
+      <li>
+        <p>条件渲染</p>
+
+        <p>格式如下</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  if条件判断
+        
+   else if条件判断
+        
+   else条件
+        
+   条件结束
+</code></pre></div>        </div>
+      </li>
+      <li>列表渲染
+        <ul>
+          <li>普通列表渲染</li>
+          <li>通过did进行优化</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="周边生态">周边生态</h2>
+
+<ul>
+  <li>加载系统
+    <ul>
+      <li>TODO</li>
+    </ul>
+  </li>
+  <li>构建系统
+    <ul>
+      <li>TODO</li>
+    </ul>
+  </li>
+</ul>
