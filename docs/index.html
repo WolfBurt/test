@@ -1,4 +1,60 @@
-<h2 id="介绍">介绍</h2>
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Leap Day theme | Leap Day is a theme for GitHub Pages.</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Leap Day theme" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Leap Day is a theme for GitHub Pages." />
+<meta property="og:description" content="Leap Day is a theme for GitHub Pages." />
+<link rel="canonical" href="http://localhost:4000/" />
+<meta property="og:url" content="http://localhost:4000/" />
+<meta property="og:site_name" content="Leap Day theme" />
+<script type="application/ld+json">
+{"name":"Leap Day theme","description":"Leap Day is a theme for GitHub Pages.","@type":"WebSite","url":"http://localhost:4000/","headline":"Leap Day theme","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
+    <script src="assets/js/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Leap Day theme</h1>
+        <p>Leap Day is a theme for GitHub Pages.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="" class="button fork"><strong>View On GitHub</strong></a>
+        
+          <div class="downloads">
+            <span>Downloads:</span>
+            <ul>
+              <li><a href="" class="button">ZIP</a></li>
+              <li><a href="" class="button">TAR</a></li>
+            </ul>
+          </div>
+        
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2 id="介绍">介绍</h2>
 
 <h3 id="pi_front是什么">pi_front是什么</h3>
 
@@ -116,283 +172,208 @@
 
 <h2 id="组件系统">组件系统</h2>
 
-<ul>
-  <li>创建组件
-    <ul>
-      <li>
-        <p>默认组件(js/wcss/tpl/config)</p>
+<h3 id="创建组件">创建组件</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 默认组件(js/wcss/tpl/config)
 
-        <p>一个简单的组件，一般需要一个tpl文件，用于定义该组件的布局结构，是组件的主题表现；</p>
+    一个简单的组件，一般需要一个tpl文件，用于定义该组件的布局结构，是组件的主题表现；
+    
+    在此基础上，可配置同名的js文件，用于对其逻辑数据进行处理；
+    
+    在此基础上，可配置同名的wcss文件，用于对其样式进行处理，详见下方样式处理
 
-        <p>在此基础上，可配置同名的js文件，用于对其逻辑数据进行处理；</p>
+    在此基础上，可配置同名的config文件，用于对组件进行完善，常用属性如下
+    - group:该组件显示某个主层级中
+    - 也可以在对应的组件的create函数中定义
 
-        <p>在此基础上，可配置同名的wcss文件，用于对其样式进行处理，详见下方样式处理</p>
+            create(){        
+                super.create();
+                this.config = {value:{group:"cover"}}
+            }
 
-        <p>在此基础上，可配置同名的config文件，用于对组件进行完善，常用属性如下</p>
-        <ul>
-          <li>group:该组件显示某个主层级中</li>
-          <li>
-            <p>也可以在对应的组件的create函数中定义</p>
+- .widget组件(wcss/tpl/forelet/widget/config)
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  create(){        
-      super.create();
-      this.config = {value:{group:"cover"}}
-  }
-</code></pre></div>            </div>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>.widget组件(wcss/tpl/forelet/widget/config)</p>
+    这是一种可实现通过配置，实现tpl、wcss、js、config不同的组装，构建出新的一个组件，从而实现复用
 
-        <p>这是一种可实现通过配置，实现tpl、wcss、js、config不同的组装，构建出新的一个组件，从而实现复用</p>
-      </li>
-      <li>
-        <p>如何创建一个组件</p>
-        <ul>
-          <li>
-            <p>通过在tpl中直接定义，可直接创建组件</p>
+- 如何创建一个组件
+    + 通过在tpl中直接定义，可直接创建组件
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;children-playerarea-playerarea$&gt;{"isOpponent":false,player:}&lt;/children-playerarea-playerarea$&gt;
+            &lt;children-playerarea-playerarea$&gt;{"isOpponent":false,player:}&lt;/children-playerarea-playerarea$&gt;
 
-  常用的格式还有以下几种
-  &lt;role_show$ style=""&gt;&lt;/role_show$&gt;表示本目录下的role_show组件，
-  &lt;role_show$$ style=""&gt;&lt;/role_show$$&gt;表示父目录下的role_show组件，
-  &lt;role_show-zb_show$$ style=""&gt;&lt;/role_show-zb_show$$&gt;表示父目录下role_show目录下的zb_show组件
-  &lt;app-base-btn style=""&gt;&lt;/app-base-btn&gt;表示根目录开始，app/base目录下的btn组件
-</code></pre></div>            </div>
-          </li>
-          <li>
-            <p>通过调用pi.ui.root模块中pop或popNew函数，弹出新的组件界面</p>
+            常用的格式还有以下几种
+            &lt;role_show$ style=""&gt;&lt;/role_show$&gt;表示本目录下的role_show组件，
+            &lt;role_show$$ style=""&gt;&lt;/role_show$$&gt;表示父目录下的role_show组件，
+            &lt;role_show-zb_show$$ style=""&gt;&lt;/role_show-zb_show$$&gt;表示父目录下role_show目录下的zb_show组件
+            &lt;app-base-btn style=""&gt;&lt;/app-base-btn&gt;表示根目录开始，app/base目录下的btn组件
+    + 通过调用pi.ui.root模块中pop或popNew函数，弹出新的组件界面
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  import { popNew } from '../../pi/ui/root';
+            import { popNew } from '../../pi/ui/root';
 
-  popNew(foreletName, foreletParams, (ok:string) =&gt; {
-      //todo 这里处理触发ok函数时的回调
-  }, (cancel:string) =&gt; {
-      //todo 这里处理触发cancel函数时的回调
-  });
-</code></pre></div>            </div>
-          </li>
-          <li>
-            <p>通过第二种方式弹出组件界面时，可在foreletParams中定义另一个组件名，已widget做键，可同时再创建新的一个组件。(?显示方式)</p>
+            popNew(foreletName, foreletParams, (ok:string) =&gt; {
+                //todo 这里处理触发ok函数时的回调
+            }, (cancel:string) =&gt; {
+                //todo 这里处理触发cancel函数时的回调
+            });
+    + 通过第二种方式弹出组件界面时，可在foreletParams中定义另一个组件名，已widget做键，可同时再创建新的一个组件。(?显示方式)
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  import { popNew } from '../../pi/ui/root';
+            import { popNew } from '../../pi/ui/root';
 
-  foreletParams.widget = newForeletName;
+            foreletParams.widget = newForeletName;
 
-  popNew(foreletName, foreletParams, (ok:string) =&gt; {
-      //todo 这里处理触发ok函数时的回调
-  }, (cancel:string) =&gt; {
-      //todo 这里处理触发cancel函数时的回调
-  });
-</code></pre></div>            </div>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>样式处理
-    <ul>
-      <li>
-        <p>wcss</p>
+            popNew(foreletName, foreletParams, (ok:string) =&gt; {
+                //todo 这里处理触发ok函数时的回调
+            }, (cancel:string) =&gt; {
+                //todo 这里处理触发cancel函数时的回调
+            });
+</code></pre></div></div>
 
-        <p>wcss样式文件是我们自定义的用于处理样式的文件，通过定义<code class="highlighter-rouge">w-class="my-money"</code>实现对其引用。其格式与原生css结构一致，因其原理限制，暂不支持伪类( :hover)、伪对象( :first-child)和关键帧动画( animation keyframes)</p>
-      </li>
-      <li>
-        <p>wcss处理原理</p>
+<h3 id="样式处理">样式处理</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- wcss
 
-        <p>我们会将所有的wcss中定义的属性改为内联样式添加到对应都没节点上，但其优先级会略低于直接定义的内联样式。</p>
+    wcss样式文件是我们自定义的用于处理样式的文件，通过定义`w-class="my-money"`实现对其引用。其格式与原生css结构一致，因其原理限制，暂不支持伪类( :hover)、伪对象( :first-child)和关键帧动画( animation keyframes)
 
-        <p>因其最终表现为内联样式，就有了上述说的某些不支持的情况。</p>
+- wcss处理原理
 
-        <p>由于引用wcss文件不占有原生引用css文件位置，那么一个dom节点上能同时再引入全局css文件进行处理</p>
-      </li>
-      <li>
-        <p>样式的优先级(innerstyle&gt;wcss&gt;css–参见css例子)</p>
+    我们会将所有的wcss中定义的属性改为内联样式添加到对应都没节点上，但其优先级会略低于直接定义的内联样式。
+    
+    因其最终表现为内联样式，就有了上述说的某些不支持的情况。
 
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # tpl文件
-  &lt;section w-class="my-money" class="center" style="color:red;"&gt;$999&lt;/section&gt;
+    由于引用wcss文件不占有原生引用css文件位置，那么一个dom节点上能同时再引入全局css文件进行处理
 
-  # wcss文件
-  .my-money {
-      position: absolute;
-      bottom:0;
-      left:0;
-      width:30%;
-      height:25px;
-      border-radius:0px 150px 0px 0px;
-      background-color:rgba(0, 255, 128, 0.3);
-  }
+- 样式的优先级(innerstyle&gt;wcss&gt;css--参见css例子)
 
-  # 全局css文件
-  .center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
-</code></pre></div>        </div>
+        # tpl文件
+        &lt;section w-class="my-money" class="center" style="color:red;"&gt;$999&lt;/section&gt;
 
-        <p>上述就是一个简单的样式应用</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>数据传递</p>
+        # wcss文件
+        .my-money {
+            position: absolute;
+            bottom:0;
+            left:0;
+            width:30%;
+            height:25px;
+            border-radius:0px 150px 0px 0px;
+            background-color:rgba(0, 255, 128, 0.3);
+        }
 
-    <p>组件间的数据传递，将孤立的组件串联起来，构成一个整体</p>
+        # 全局css文件
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+    上述就是一个简单的样式应用
+</code></pre></div></div>
 
-    <ul>
-      <li>子组件=&gt;父组件
-        <ul>
-          <li>通过子组件抛出事件，父组件监听事件的形式实现数据传递</li>
-        </ul>
-      </li>
-      <li>
-        <p>父组件=&gt;子组件</p>
+<h3 id="数据传递">数据传递</h3>
 
-        <p>在创建组件时传入参数</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>组件间的数据传递，将孤立的组件串联起来，构成一个整体
 
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;role_show$ style=""&gt;这里可传入参数&lt;/role_show$&gt;
++ 子组件=&gt;父组件
+    - 通过子组件抛出事件，父组件监听事件的形式实现数据传递
++ 父组件=&gt;子组件
+    
+    在创建组件时传入参数
 
-  popNew(foreletName, foreletParams);
-  foreletParams:传递的参数
-</code></pre></div>        </div>
-      </li>
-      <li>简单数据传递</li>
-      <li>含有变量的数据传递</li>
-      <li>多层数据传递</li>
-    </ul>
-  </li>
-  <li>事件处理
-    <ul>
-      <li>
-        <p>自定义事件</p>
+        &lt;role_show$ style=""&gt;这里可传入参数&lt;/role_show$&gt;
 
-        <p>自定义事件被广泛应用于组件间的数据传递，直系父子间都能通过自定义的事件来完成</p>
-      </li>
-      <li>
-        <p>系统事件</p>
-        <ul>
-          <li>可直接绑定7种我们支持的系统事件，在事件监听中有具体的定义</li>
-          <li>cap—代表传递方式为捕获</li>
-          <li>on—代表传递方式为冒泡</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>生命周期
-    <ul>
-      <li>帧调度</li>
-      <li>widget
-        <ul>
-          <li>
-            <p>什么是widget</p>
+        popNew(foreletName, foreletParams);
+        foreletParams:传递的参数
 
-            <p>负责显示逻辑，是数据和原始dom间的桥梁</p>
-          </li>
-          <li>
-            <p>widget属性</p>
++ 简单数据传递
++ 含有变量的数据传递
++ 多层数据传递 ### 事件处理
++ 自定义事件
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  public name: string = null; // 组件的名称
-  public tpl: Tpl = null; // 组件的模板
-  public sheet: {value: Sheet} = null; // 组件的样式
-  public config: {value: Json} = null; // 所对应的配置
-  public forelet: Forelet = null; // 所对应的forelet
-  public props: Json = null; // 由父组件设置的组件属性
-  public state: Json = null; // 由forelet设置的组件状态
-  public tree: VWNode = null; // 组件所对应的节点树
-  public parentNode: VirtualWidgetNode = null; // 父节点，parentNode.link的对象就是widget
-  public children: Widget[] = []; // 所有的子组件
-  public inDomTree: boolean = false; // 是否在dom树中
-  public resTab: ResTab = null; // 资源表
-  public resTimeout: number = 3000; // 资源缓冲时间，默认3秒
-</code></pre></div>            </div>
-          </li>
-          <li>widget生命周期钩子</li>
-          <li>widget生命周期图示</li>
-        </ul>
-      </li>
-      <li>forelet
-        <ul>
-          <li>
-            <p>forelet作用</p>
+    自定义事件被广泛应用于组件间的数据传递，直系父子间都能通过自定义的事件来完成
 
-            <p>负责进行业务逻辑处理，是数据库和显示组件间的桥梁</p>
-          </li>
-          <li>
-            <p>forelet生命周期</p>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>模板语法
-    <ul>
-      <li>
-        <p>注释</p>
++ 系统事件
+    - 可直接绑定7种我们支持的系统事件，在事件监听中有具体的定义
+    - cap---代表传递方式为捕获
+    - on---代表传递方式为冒泡 ### 生命周期
++ 帧调度
++ widget
+    + 什么是widget
 
-        <p>直接在模板中定义``实现添加注释</p>
-      </li>
-      <li>插值(强调可以在任何地方插值)
-        <ul>
-          <li>文本</li>
-          <li>css片段</li>
-          <li>
-            <p>js表达式</p>
+        负责显示逻辑，是数据和原始dom间的桥梁
 
-            <p>因模板处理原理是对tpl中字符串进行解析处理，通过一定规范，重新转换为新的字符串，并解析为对于的节点树，所以我们可在任意地方进行插值，构建出想要的效果。</p>
+    + widget属性
 
-            <p>常用的插值格式有以下几种</p>
+            public name: string = null; // 组件的名称
+            public tpl: Tpl = null; // 组件的模板
+            public sheet: {value: Sheet} = null; // 组件的样式
+            public config: {value: Json} = null; // 所对应的配置
+            public forelet: Forelet = null; // 所对应的forelet
+            public props: Json = null; // 由父组件设置的组件属性
+            public state: Json = null; // 由forelet设置的组件状态
+            public tree: VWNode = null; // 组件所对应的节点树
+            public parentNode: VirtualWidgetNode = null; // 父节点，parentNode.link的对象就是widget
+            public children: Widget[] = []; // 所有的子组件
+            public inDomTree: boolean = false; // 是否在dom树中
+            public resTab: ResTab = null; // 资源表
+            public resTimeout: number = 3000; // 资源缓冲时间，默认3秒
 
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  调用函数:
-  判断赋值:
-  直接赋值：
-  默认值赋值：
-</code></pre></div>            </div>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>变量定义</p>
+    + widget生命周期钩子
+    + widget生命周期图示
++ forelet
+    + forelet作用
 
-        <p>直接在模板中定义<code class="highlighter-rouge">实现定义变量并赋值，也可以通过定义</code>对数据进行修改</p>
-      </li>
-      <li>函数声明</li>
-      <li>内置变量
-        <ul>
-          <li>it–对应组件中props中的值，也就是父组件传递下来的数据</li>
-          <li>it1–对应组件中state中的值，也就是当前界面自己定义的数据</li>
-          <li>_cfg–对应组件中配置的额外参数，对应config文件中的配置</li>
-        </ul>
+        负责进行业务逻辑处理，是数据库和显示组件间的桥梁
 
-        <p>我们在模板中，有以上几个内置变量可直接使用。</p>
+    + forelet生命周期
+</code></pre></div></div>
 
-        <p>警告：内置变量中的值不要在模板中修改</p>
-      </li>
-      <li>
-        <p>条件渲染</p>
+<h3 id="模板语法">模板语法</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ 注释
 
-        <p>格式如下</p>
+    直接在模板中定义``实现添加注释
 
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  if条件判断
++ 插值(强调可以在任何地方插值)
+    - 文本
+    - css片段
+    - js表达式
+    
+        因模板处理原理是对tpl中字符串进行解析处理，通过一定规范，重新转换为新的字符串，并解析为对于的节点树，所以我们可在任意地方进行插值，构建出想要的效果。
+
+        常用的插值格式有以下几种
+
+            调用函数:
+            判断赋值:
+            直接赋值：
+            默认值赋值：
+
++ 变量定义
+
+    直接在模板中定义``实现定义变量并赋值，也可以通过定义``对数据进行修改
+
++ 函数声明
++ 内置变量
+    - it--对应组件中props中的值，也就是父组件传递下来的数据
+    - it1--对应组件中state中的值，也就是当前界面自己定义的数据
+    - _cfg--对应组件中配置的额外参数，对应config文件中的配置
+
+    我们在模板中，有以上几个内置变量可直接使用。
+
+    警告：内置变量中的值不要在模板中修改
+
+    
++ 条件渲染
+
+    格式如下
+
+        if条件判断
         
-   else if条件判断
+         else if条件判断
         
-   else条件
+         else条件
         
-   条件结束
-</code></pre></div>        </div>
-      </li>
-      <li>列表渲染
-        <ul>
-          <li>普通列表渲染</li>
-          <li>通过did进行优化</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+         条件结束
+        
+
++ 列表渲染
+    + 普通列表渲染
+    + 通过did进行优化
+</code></pre></div></div>
 
 <h2 id="周边生态">周边生态</h2>
 
@@ -408,3 +389,16 @@
     </ul>
   </li>
 </ul>
+
+
+
+      </section>
+      <footer>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
